@@ -1,0 +1,23 @@
+# syntax=docker/dockerfile:1
+FROM --platform=$BUILDPLATFORM alpine:{version}
+
+ARG BUILDPLATFORM
+
+RUN set -e \
+    && apk add --no-cache \
+        sudo ruby ruby-dev git bash zsh tree nano
+
+RUN adduser -h /home/alpine -s /bin/zsh alpine -D
+RUN set -e \
+    && sed -i '/\%wheel/ c \%wheel ALL=(ALL) NOPASSWD: ALL' /etc/sudoers \
+    && addgroup alpine wheel
+
+USER alpine
+WORKDIR /home/alpine/
+
+RUN set -e \
+    && sudo gem install cr-exec make-env
+
+ADD https://github.com/initdc/dotfiles/raw/refs/heads/master/.bashrc .
+ADD https://github.com/initdc/dotfiles/raw/refs/heads/master/.proxy .
+ADD https://github.com/initdc/dotfiles/raw/refs/heads/master/.zshrc .
