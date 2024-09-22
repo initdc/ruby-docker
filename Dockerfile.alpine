@@ -21,3 +21,6 @@ RUN set -e \
 ADD https://github.com/initdc/dotfiles/raw/refs/heads/master/.bashrc .
 ADD https://github.com/initdc/dotfiles/raw/refs/heads/master/.proxy .
 ADD https://github.com/initdc/dotfiles/raw/refs/heads/master/.zshrc .
+
+RUN set -e \
+    && sudo chown alpine:alpine .proxy .bashrc .zshrc
